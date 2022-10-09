@@ -4,7 +4,7 @@ import PocketBase from 'pocketbase';
 
 function App() {
   const client = new PocketBase('http://127.0.0.1:8090');
-
+  // realtime db
   const [realtimeWord, setRealtimeWord] = useState('');
   const [recordId, setRecordId] = useState('');
 
