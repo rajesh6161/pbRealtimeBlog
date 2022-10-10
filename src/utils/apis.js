@@ -12,7 +12,10 @@ export const login = async ({ email, password }, callback) => {
   } catch (error) {
     callback({
       type: 'error',
-      message: error.data.message,
+      message:
+        error?.data?.message?.length > 0
+          ? error.data?.message
+          : 'Something went wrong',
     });
   }
 };
@@ -58,10 +61,16 @@ export const logout = () => {
 
 export const createPost = async (data, callback) => {
   try {
-    const record = await client.records.create('posts', data);
-    console.log(record);
+    await client.records.create('posts', data);
+    callback({
+      type: 'success',
+      message: 'Post created successfully',
+    });
   } catch (error) {
-    console.log('error in createPost', error.data);
+    callback({
+      type: 'error',
+      message: error.data.message,
+    });
   }
 };
 
@@ -76,5 +85,14 @@ export const getPosts = async (callback) => {
     });
   } catch (error) {
     console.log('Error while getting posts', error.data);
+  }
+};
+
+export const likePost = async (recId, data, callback) => {
+  try {
+    const record = await client.records.update('posts', recId, data);
+    console.log(record);
+  } catch (error) {
+    console.log('error while updating', error.data);
   }
 };

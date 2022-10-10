@@ -8,6 +8,8 @@ const CreatePost = ({ setShowCreatePost, showCreatePost, authState, user }) => {
     content: '',
     imgurl: '',
   });
+  const defaultImg =
+    'https://images.freeimages.com/images/large-previews/bee/omniety-1535599.jpg';
   return (
     <>
       <Navbar
@@ -58,7 +60,11 @@ const CreatePost = ({ setShowCreatePost, showCreatePost, authState, user }) => {
             onClick={() => {
               createPost({
                 ...postState,
+                imgurl: postState.imgurl || defaultImg,
                 user: user.id,
+                likes: {
+                  users: [],
+                },
               });
               setShowCreatePost(false);
             }}

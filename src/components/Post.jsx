@@ -1,27 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 
-const Post = ({ post }) => {
+const Post = ({ post, setShowPost, setCurrentPost }) => {
   const { title, content, imgurl, user, updated } = post;
 
-  const sampleImg =
-    'https://images.freeimages.com/images/large-previews/bee/omniety-1535599.jpg';
+  const useCurrentPost = () => {
+    setCurrentPost(post);
+    setShowPost(true);
+  };
   return (
     <div className="md:max-w-[700px] max-w-sm pb-5 px-5 md:px-0">
-      {imgurl?.length > 0 ? (
+      {imgurl?.length > 0 && (
         <div className="md:w-[600px] overflow-hidden">
           <img
             src={imgurl}
             alt="blog image"
-            className="w-full h-64 object-cover grayscale hover:grayscale-0 duration-150 delay-150 hover:scale-150 cursor-pointer"
-          />
-        </div>
-      ) : (
-        <div className="md:w-[600px] overflow-hidden">
-          <img
-            src={sampleImg}
-            alt="sample image"
-            className="w-full h-64 object-cover grayscale hover:grayscale-0 duration-150 delay-150 hover:scale-150 cursor-pointer"
+            className="w-full h-64 object-cover grayscale hover:grayscale-0 duration-150 hover:scale-150 cursor-pointer"
+            onClick={useCurrentPost}
           />
         </div>
       )}
@@ -31,7 +26,10 @@ const Post = ({ post }) => {
           <h1 className="text-3xl font-semibold">{title}</h1>
           <div className="max-h-[50px] truncate">{content}</div>
           <div className="flex items-center justify-between py-3">
-            <p className="uppercase font-semibold flex items-center">
+            <p
+              className="uppercase font-semibold flex items-center cursor-pointer"
+              onClick={useCurrentPost}
+            >
               Read Article{' '}
               <svg
                 className="w-4 h-4 ml-2"
@@ -41,9 +39,9 @@ const Post = ({ post }) => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1"
                   d="M9 5l7 7-7 7"
                 ></path>
               </svg>

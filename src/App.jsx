@@ -6,45 +6,33 @@ import AuthPage from './components/AuthPage';
 
 function App() {
   const client = new PocketBase('http://127.0.0.1:8090');
-  // realtime db
-  const [realtimeWord, setRealtimeWord] = useState('');
-  const [recordId, setRecordId] = useState('');
 
-  const updateWord = async (rec_id, letter) => {
-    try {
-      await client.records.update('wordle', rec_id, {
-        word: letter,
-      });
-    } catch (error) {
-      console.log('Error occurred while updating the todo', error);
-    }
-  };
+  const [posts, setPosts] = useState([]);
+  const [showPost, setShowPost] = useState(false);
 
-  const initWord = async () => {
-    try {
-      let word = await client.records.getFullList('wordle', 1, {
-        sort: '-created',
-      });
-      if (word.length === 0) {
-        await client.records.create('wordle', {
-          word: '',
-        });
-        let w = await client.records.getFullList('wordle', 1, {
-          sort: '-created',
-        });
-        setRecordId(w[0].id);
-      } else {
-        setRecordId(word[0].id);
-      }
-    } catch (error) {
-      console.log('Error occurred while getting word', error.data);
-    }
-  };
-  console.log(recordId);
   useEffect(() => {
-    client.realtime.subscribe('wordle', function (e) {
-      console.log('realtime', e.record);
-      setRealtimeWord(e.record);
+    client.realtime.subscribe('posts', function (e) {
+      if (e.action === 'delete') {
+        setPosts(
+          posts.filter((post) => {
+            return post.id !== e.record.id;
+          })
+        );
+        return;
+      }
+
+      if (e.action === 'update') {
+        setPosts(
+          posts.map((post) => {
+            if (post.id === e.record.id) {
+              return e.record;
+            }
+            return post;
+          })
+        );
+        return;
+      }
+      setPosts((prev) => [e.record, ...prev]);
     });
     return () => {
       client.realtime.unsubscribe();
@@ -56,7 +44,6 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // initWord();
     let pocketbase_auth = localStorage.getItem('pocketbase_auth');
     pocketbase_auth = JSON.parse(pocketbase_auth);
     if (pocketbase_auth?.token?.length > 0) {
@@ -75,6 +62,10 @@ function App() {
           showCreatePost={showCreatePost}
           authState={authState}
           user={user}
+          posts={posts}
+          setPosts={setPosts}
+          showPost={showPost}
+          setShowPost={setShowPost}
         />
       ) : (
         <CreatePost
