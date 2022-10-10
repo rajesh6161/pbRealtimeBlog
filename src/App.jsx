@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import { DebounceInput } from 'react-debounce-input';
 import PocketBase from 'pocketbase';
+import MainScreen from './components/MainScreen';
+import CreatePost from './components/CreatePost';
+import AuthPage from './components/AuthPage';
 
 function App() {
   const client = new PocketBase('http://127.0.0.1:8090');
@@ -49,20 +51,39 @@ function App() {
     };
   });
 
+  const [showCreatePost, setShowCreatePost] = useState(false);
+  const [authState, setAuthState] = useState(false);
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
-    initWord();
-  }, []);
+    // initWord();
+    let pocketbase_auth = localStorage.getItem('pocketbase_auth');
+    pocketbase_auth = JSON.parse(pocketbase_auth);
+    if (pocketbase_auth?.token?.length > 0) {
+      setAuthState(true);
+      setUser(pocketbase_auth.model);
+    }
+  }, [authState]);
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen ">
-      <DebounceInput
-        minLength={1}
-        debounceTimeout={0}
-        onChange={(e) => {
-          updateWord(recordId, e.target.value);
-        }}
-      />
-      <p>{realtimeWord.word}</p>
+    <div className="flex flex-col h-screen">
+      {!authState ? (
+        <AuthPage setAuthState={setAuthState} setUser={setUser} />
+      ) : !showCreatePost ? (
+        <MainScreen
+          setShowCreatePost={setShowCreatePost}
+          showCreatePost={showCreatePost}
+          authState={authState}
+          user={user}
+        />
+      ) : (
+        <CreatePost
+          setShowCreatePost={setShowCreatePost}
+          showCreatePost={showCreatePost}
+          authState={authState}
+          user={user}
+        />
+      )}
     </div>
   );
 }
