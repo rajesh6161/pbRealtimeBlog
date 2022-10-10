@@ -1,6 +1,7 @@
-# Realtime Blog App made using react featuring PocketBase
+# Realtime Blog App made using React and PocketBase
 ![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Frajesh6161%2FpbRealtimeBlog&label=TOTAL%20VIEWS&countColor=%2337d67a&style=plastic&labelStyle=upper)
 ### PocketBase is an Open Source backend comprises of only one single file, written in **Go**, for more info visit: [https://pocketbase.io/](https://pocketbase.io/)
+
 #### For beginner friendly Todo app using React+PocketBase visit: [blog](https://dev.to/rajesh6161/realtime-todo-app-using-react-and-pocketbase-3mf), [repo](https://github.com/rajesh6161/pocketbaseTodo) is now part of the official PocketBase [show-and-tell](https://github.com/pocketbase/pocketbase/discussions/categories/show-and-tell) and [awesome-pocketbase](https://github.com/benallfree/awesome-pocketbase/)
 
 #### *This is a SPA and does not have any routing or redux. (contributions are open)
