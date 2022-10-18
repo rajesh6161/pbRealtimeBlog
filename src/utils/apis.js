@@ -1,5 +1,4 @@
-import PocketBase from 'pocketbase';
-const client = new PocketBase('http://127.0.0.1:8090');
+import { client } from './config';
 
 export const login = async ({ email, password }, callback) => {
   try {
@@ -36,10 +35,16 @@ export const createUser = async (
     });
   } catch (error) {
     let err = error.data.data;
+    console.log(err);
     if (err.email) {
       callback({
         type: 'error',
         message: err.email.message,
+      });
+    } else if (err.password) {
+      callback({
+        type: 'error',
+        message: err.password.message,
       });
     } else if (err.passwordConfirm) {
       callback({
@@ -59,18 +64,18 @@ export const logout = () => {
   window.location.reload();
 };
 
-export const createPost = async (data, callback) => {
+export const createPost = async (data) => {
   try {
     await client.records.create('posts', data);
-    callback({
-      type: 'success',
-      message: 'Post created successfully',
-    });
+    // callback({
+    //   type: 'success',
+    //   message: 'Post created successfully',
+    // });
   } catch (error) {
-    callback({
-      type: 'error',
-      message: error.data.message,
-    });
+    // callback({
+    //   type: 'error',
+    //   message: error.data.message,
+    // });
   }
 };
 

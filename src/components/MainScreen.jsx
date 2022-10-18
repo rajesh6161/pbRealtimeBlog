@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
-import Post from './Post';
+import Post from './post/Post';
 import { getPosts } from '../utils/apis';
-import PostPage from './PostPage';
+import PostPage from './post/PostPage';
 
 const MainScreen = ({
   setShowCreatePost,
   showCreatePost,
-  authState,
+  loggedIn,
   user,
   posts,
   setPosts,
@@ -31,7 +31,7 @@ const MainScreen = ({
       <Navbar
         setShowCreatePost={setShowCreatePost}
         showCreatePost={showCreatePost}
-        authState={authState}
+        loggedIn={loggedIn}
         user={user}
         setShowPost={setShowPost}
         showPost={showPost}

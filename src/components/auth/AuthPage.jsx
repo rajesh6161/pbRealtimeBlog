@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
-import { createUser, login } from '../utils/apis';
+import React, { useEffect, useState } from 'react';
+import {
+  login,
+  register,
+  setUserLoggedIn,
+} from '../../features/auth/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import Spinner from '../Spinner';
 
-const AuthPage = ({ setAuthState, setUser }) => {
+const AuthPage = () => {
+  const dispatch = useDispatch();
+
   const [loginPage, setLoginPage] = useState(true);
   const [creds, setCreds] = useState({
     email: '',
@@ -9,25 +17,21 @@ const AuthPage = ({ setAuthState, setUser }) => {
     passwordConfirm: '',
   });
 
-  const callback = (data) => {
-    const { type, message } = data;
-    if (type === 'loginSuccess') {
-      let pocketbase_auth = localStorage.getItem('pocketbase_auth');
-      pocketbase_auth = JSON.parse(pocketbase_auth);
-      if (pocketbase_auth?.token?.length > 0) {
-        setAuthState(true);
-        setUser(pocketbase_auth.model);
-      }
-    } else if (type === 'regSuccess') {
+  useEffect(() => {
+    dispatch(setUserLoggedIn());
+  }, [dispatch]);
+
+  const { loading, isRegistered } = useSelector((state) => state.auth);
+  useEffect(() => {
+    if (isRegistered) {
       setLoginPage(true);
-    } else {
-      alert(message);
     }
-  };
+  }, [isRegistered]);
+
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
-        <div>
+        <>
           <img
             className="mx-auto h-12 w-auto"
             src="https://www.clipartmax.com/png/full/111-1112912_go-gopher-go-programming-language-logo.png"
@@ -46,12 +50,12 @@ const AuthPage = ({ setAuthState, setUser }) => {
               {loginPage ? 'Register a new account' : 'Login to your account'}
             </a>
           </p>
-        </div>
+        </>
         <form
           className="mt-8 space-y-6"
           onSubmit={(e) => {
             e.preventDefault();
-            loginPage ? login(creds, callback) : createUser(creds, callback);
+            loginPage ? dispatch(login(creds)) : dispatch(register(creds));
           }}
         >
           <input type="hidden" name="remember" value="true" />
@@ -136,7 +140,8 @@ const AuthPage = ({ setAuthState, setUser }) => {
                   />
                 </svg>
               </span>
-              {loginPage ? 'Login' : 'Register'}
+
+              {loading ? <Spinner /> : loginPage ? 'Login' : 'Register'}
             </button>
           </div>
         </form>

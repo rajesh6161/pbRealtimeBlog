@@ -1,14 +1,17 @@
 import React from 'react';
-import { logout } from '../utils/apis';
+import { useDispatch } from 'react-redux';
+import { logout } from '../features/auth/authSlice';
 
 const Navbar = ({
   setShowCreatePost,
   showCreatePost,
-  authState,
+  loggedIn,
   user,
   setShowPost,
   showPost,
 }) => {
+  const dispatch = useDispatch();
+
   return (
     <div className="flex items-center justify-between bg-gray-900 shadow-md py-5 md:px-8 px-3 text-white">
       <div className="flex items-center space-x-5">
@@ -33,13 +36,13 @@ const Navbar = ({
           ></i>
         )}
         <h1 className="tracking-[8px] text-2xl font-semibold">IMPULSE</h1>
-        {authState && (
+        {loggedIn && (
           <span className="text-sm ml-2 hidden md:block">
             <i className="fa-solid fa-user mx-2"></i>
             {user.email}
           </span>
         )}
-        <button className="text-sm" onClick={logout}>
+        <button className="text-sm" onClick={() => dispatch(logout())}>
           <i className="fa-solid fa-right-to-bracket mx-2"></i>logout
         </button>
       </div>

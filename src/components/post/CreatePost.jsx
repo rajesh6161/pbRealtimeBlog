@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
-import { createPost } from '../utils/apis';
-import Navbar from './Navbar';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+// import { createPost } from '../../utils/apis';
+import { createPost } from '../../features/post/postSlice';
+import Navbar from '../Navbar';
+import Spinner from '../Spinner';
 
-const CreatePost = ({ setShowCreatePost, showCreatePost, authState, user }) => {
+const CreatePost = ({ setShowCreatePost, showCreatePost, user }) => {
+  const dispatch = useDispatch();
   const [postState, setPostState] = useState({
     title: '',
     content: '',
@@ -10,12 +14,14 @@ const CreatePost = ({ setShowCreatePost, showCreatePost, authState, user }) => {
   });
   const defaultImg =
     'https://images.freeimages.com/images/large-previews/bee/omniety-1535599.jpg';
+
+  const { loading } = useSelector((state) => state.post);
+
   return (
     <>
       <Navbar
         setShowCreatePost={setShowCreatePost}
         showCreatePost={showCreatePost}
-        authState={authState}
         user={user}
       />
       <div className="flex flex-col justify-center items-center mx-5 py-10">
@@ -58,18 +64,19 @@ const CreatePost = ({ setShowCreatePost, showCreatePost, authState, user }) => {
           <button
             className="bg-gray-700 w-full p-2 text-white hover:bg-slate-900"
             onClick={() => {
-              createPost({
-                ...postState,
-                imgurl: postState.imgurl || defaultImg,
-                user: user.id,
-                likes: {
-                  users: [],
-                },
-              });
-              setShowCreatePost(false);
+              dispatch(
+                createPost({
+                  ...postState,
+                  imgurl: postState.imgurl || defaultImg,
+                  user: user.id,
+                  likes: {
+                    users: [],
+                  },
+                })
+              );
             }}
           >
-            Submit
+            {loading ? <Spinner /> : 'Create Post'}
           </button>
         </div>
       </div>

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
 
 const Post = ({ post, setShowPost, setCurrentPost }) => {
   const { title, content, imgurl, user, updated } = post;
@@ -8,6 +9,8 @@ const Post = ({ post, setShowPost, setCurrentPost }) => {
     setCurrentPost(post);
     setShowPost(true);
   };
+  const { user: currUser } = useSelector((state) => state.auth);
+
   return (
     <div className="md:max-w-[700px] max-w-sm pb-5 px-5 md:px-0">
       {imgurl?.length > 0 && (
@@ -50,6 +53,7 @@ const Post = ({ post, setShowPost, setCurrentPost }) => {
           </div>
         </div>
       </div>
+      {currUser?.id === user && <div className="bg-gray-800 w-full h-1"></div>}
     </div>
   );
 };
