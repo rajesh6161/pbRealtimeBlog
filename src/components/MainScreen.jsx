@@ -66,7 +66,11 @@ const MainScreen = ({
           )}
         </div>
       ) : (
-        <PostPage currentPost={currentPost} currUser={user.id} />
+        <PostPage
+          setShowPost={setShowPost}
+          currentPost={currentPost}
+          currUser={user.id}
+        />
       )}
     </>
   );
