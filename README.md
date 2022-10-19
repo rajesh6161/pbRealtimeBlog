@@ -1,70 +1,34 @@
-# Getting Started with Create React App
+# Realtime Blog App made using React and PocketBase
+![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Frajesh6161%2FpbRealtimeBlog&label=TOTAL%20VIEWS&countColor=%2337d67a&style=plastic&labelStyle=upper)
+### PocketBase is an Open Source backend comprises of only one single file, written in **Go**, for more info visit: [https://pocketbase.io/](https://pocketbase.io/)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#### For beginner friendly Todo app using React+PocketBase visit: [blog](https://dev.to/rajesh6161/realtime-todo-app-using-react-and-pocketbase-3mf), [repo](https://github.com/rajesh6161/pocketbaseTodo) is now part of the official PocketBase [show-and-tell](https://github.com/pocketbase/pocketbase/discussions/categories/show-and-tell) and [awesome-pocketbase](https://github.com/benallfree/awesome-pocketbase/)
 
-## Available Scripts
+## Backend
+#### Setup pocketbase locally --> spin up the server --> Create a new collection named **posts** --> and add these fields to it
+| field   | type | required |
+|---------|------|----------|
+| title   | Text | true     |
+| content | Text | true     |
+| imgurl  | URL  | false    |
+| user    | User | false    |
+| likes   | json | false    |
 
-In the project directory, you can run:
+#### *This is a SPA and does not have any routing or redux. (contributions are open)
+#### Features:
+- Authentication 🔒
+- List/View 🪟
+- Create 🪄
+- Update 🧑🏻‍💻
+- Responsive
 
-### `yarn start`
+#### Some screenshots of the application:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Home Page
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+![s1](https://user-images.githubusercontent.com/40054161/194911558-98b85cd6-3534-4ba0-ae49-40fb930cba64.jpg)
 
-### `yarn test`
+- Login Page
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![Screenshot 2022-10-10 at 21-18-16 Realtime Blog](https://user-images.githubusercontent.com/40054161/194911374-690defb2-7ee9-46ad-ac06-b56b67c2c3fb.png)
 
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
