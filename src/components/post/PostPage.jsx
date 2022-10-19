@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import postService from '../../features/post/postService';
 import { deletePost } from '../../features/post/postSlice';
+import { likePost } from '../../utils/apis';
 import Modal from '../Modal';
 import EditPost from './EditPost';
 
@@ -18,7 +19,7 @@ const PostPage = ({ currentPost, currUser, setShowPost }) => {
     } else {
       let l = Array.from(postData.likes.users);
       l.push(currUser);
-      postService.likePost(postData.id, { likes: { users: l } });
+      likePost(postData.id, { likes: { users: l } });
       setAlreadyLiked(true);
       setLikeCount(likeCount + 1);
     }
