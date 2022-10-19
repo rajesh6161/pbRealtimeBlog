@@ -14,7 +14,7 @@
 | user    | User | false    |
 | likes   | json | false    |
 
-#### *This is a SPA and does not have any routing or redux. (contributions are open)
+### Changes: Added redux, deployed on vercel.
 #### Features:
 - Authentication 🔒
 - List/View 🪟
