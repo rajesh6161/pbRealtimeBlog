@@ -1,23 +1,38 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import postService from '../../features/post/postService';
 import { deletePost } from '../../features/post/postSlice';
 import { likePost } from '../../utils/apis';
 import Modal from '../Modal';
 import EditPost from './EditPost';
+import { Post } from '../../App';
+import { AppDispatch, RootState } from '../../store';
 
-const PostPage = ({ currentPost, currUser, setShowPost }) => {
-  const dispatch = useDispatch();
-  const [postData, setPostData] = useState(currentPost);
-  const [alreadyLiked, setAlreadyLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(postData?.likes?.users.length);
+interface PostPageProps {
+  currentPost: Post;
+  currUser: string;
+  setShowPost: (show: boolean) => void;
+}
+
+interface PostLikes {
+  users: string[];
+}
+
+interface PostWithLikes extends Post {
+  likes?: PostLikes;
+}
+
+const PostPage: React.FC<PostPageProps> = ({ currentPost, currUser }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [postData, setPostData] = useState<PostWithLikes>(currentPost);
+  const [alreadyLiked, setAlreadyLiked] = useState<boolean>(false);
+  const [likeCount, setLikeCount] = useState<number>(postData?.likes?.users.length || 0);
 
   const handleLikes = () => {
     if (postData.likes?.users.includes(currUser)) {
       return;
     } else {
-      let l = Array.from(postData.likes.users);
+      let l = Array.from(postData.likes?.users || []);
       l.push(currUser);
       likePost(postData.id, { likes: { users: l } });
       setAlreadyLiked(true);
@@ -31,16 +46,13 @@ const PostPage = ({ currentPost, currUser, setShowPost }) => {
     }
   }, []);
 
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
-  // updatePostData from redux
-  const { updatedPost, loading, del_loading, isDeleted } = useSelector(
-    (state) => state.post
-  );
+  const { updatedPost, loading } = useSelector((state: RootState) => state.post);
 
   useEffect(() => {
     if (updatedPost.id === postData.id) {
-      setPostData(updatedPost);
+      setPostData(updatedPost as PostWithLikes);
     }
   }, [loading]);
 
@@ -55,7 +67,7 @@ const PostPage = ({ currentPost, currUser, setShowPost }) => {
       <div className="md:h-96 h-64 bg-red-400 overflow-hidden">
         <img
           src={postData.imgurl}
-          alt="post image"
+          alt="img"
           className="w-full md:h-96 object-cover grayscale hover:grayscale-0 duration-150 hover:scale-150 cursor-pointer"
         />
       </div>

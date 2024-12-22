@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-const Modal = ({ children, showModal, setShowModal }) => {
+interface ModalProps {
+  children: ReactNode;
+  showModal: boolean;
+  setShowModal: (show: boolean) => void;
+}
+
+const Modal: React.FC<ModalProps> = ({ children, showModal, setShowModal }) => {
   return (
     <div
       className="relative w-auto h-full"

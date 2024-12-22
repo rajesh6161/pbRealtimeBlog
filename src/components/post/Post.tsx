@@ -1,19 +1,29 @@
 import React from 'react';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+//import { RecordModel } from 'pocketbase';
+import { Post as PostType } from '../../App';
 
-const Post = ({ post, setShowPost, setCurrentPost }) => {
+interface PostProps {
+  post: PostType;
+  setShowPost: (show: boolean) => void;
+  setCurrentPost: (post: PostType) => void;
+}
+
+const Post: React.FC<PostProps> = ({ post, setShowPost, setCurrentPost }) => {
   const { title, content, imgurl, user, updated } = post;
 
   const useCurrentPost = () => {
     setCurrentPost(post);
     setShowPost(true);
   };
-  const { user: currUser } = useSelector((state) => state.auth);
+
+  const { user: currUser } = useSelector((state: RootState) => state.auth);
 
   return (
     <div className="md:max-w-[700px] max-w-sm pb-5 px-5 md:px-0">
-      {imgurl?.length > 0 && (
+      {imgurl && imgurl.length > 0 && (
         <div className="md:w-[600px] overflow-hidden">
           <img
             src={imgurl}

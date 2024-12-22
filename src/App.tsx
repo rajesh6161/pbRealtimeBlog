@@ -3,18 +3,34 @@ import MainScreen from './components/MainScreen';
 import CreatePost from './components/post/CreatePost';
 import AuthPage from './components/auth/AuthPage';
 import { useSelector } from 'react-redux';
+import { RecordModel } from 'pocketbase';
 
 // react toastify
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { client } from './utils/config';
+import { RootState } from './store';
+
+export interface Post extends RecordModel {
+  title: string;
+  content: string;
+  imgurl?: string;
+  user: string;
+  updated: string;
+}
 
 function App() {
-  const [posts, setPosts] = useState([]);
-  const [showPost, setShowPost] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [showPost, setShowPost] = useState<boolean>(false);
+  const [showCreatePost, setShowCreatePost] = useState<boolean>(false);
+
+  const { user, loggedIn } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    client.realtime.subscribe('posts', function (e) {
+    client.collection('posts').subscribe('*', function (e: {
+      action: string;
+      record: Post;
+    }) {
       if (e.action === 'delete') {
         setPosts(
           posts.filter((post) => {
@@ -38,20 +54,23 @@ function App() {
       setPosts((prev) => [e.record, ...prev]);
     });
     return () => {
-      client.realtime.unsubscribe();
+      client.collection('posts').unsubscribe();
     };
   });
 
-  const [showCreatePost, setShowCreatePost] = useState(false);
-
-  const { user, loggedIn } = useSelector((state) => state.auth);
+  if (!loggedIn || !user) {
+    return (
+      <div className="flex flex-col h-screen">
+        <ToastContainer />
+        <AuthPage />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-screen">
       <ToastContainer />
-      {!loggedIn ? (
-        <AuthPage />
-      ) : !showCreatePost ? (
+      {!showCreatePost ? (
         <MainScreen
           setShowCreatePost={setShowCreatePost}
           showCreatePost={showCreatePost}

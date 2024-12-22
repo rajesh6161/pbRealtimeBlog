@@ -3,8 +3,26 @@ import Navbar from './Navbar';
 import Post from './post/Post';
 import { getPosts } from '../utils/apis';
 import PostPage from './post/PostPage';
+import { User } from '../features/auth/authService';
+import { Post as PostType } from '../App';
 
-const MainScreen = ({
+interface MainScreenProps {
+  setShowCreatePost: (show: boolean) => void;
+  showCreatePost: boolean;
+  loggedIn: boolean;
+  user: User;
+  posts: PostType[];
+  setPosts: (posts: PostType[]) => void;
+  setShowPost: (show: boolean) => void;
+  showPost: boolean;
+}
+
+interface CallbackData {
+  type: string;
+  data: PostType[];
+}
+
+const MainScreen: React.FC<MainScreenProps> = ({
   setShowCreatePost,
   showCreatePost,
   loggedIn,
@@ -14,7 +32,19 @@ const MainScreen = ({
   setShowPost,
   showPost,
 }) => {
-  const callback = ({ type, data }) => {
+  const [currentPost, setCurrentPost] = useState<PostType>({
+    id: '',
+    collectionId: '',
+    collectionName: '',
+    created: '',
+    updated: '',
+    title: '',
+    content: '',
+    user: '',
+    imgurl: ''
+  });
+
+  const callback = ({ type, data }: CallbackData) => {
     if (type === 'success' && data.length > 0) {
       setPosts(data);
     }
@@ -23,8 +53,6 @@ const MainScreen = ({
   useEffect(() => {
     getPosts(callback);
   }, []);
-
-  const [currentPost, setCurrentPost] = useState({});
 
   return (
     <>
@@ -37,10 +65,9 @@ const MainScreen = ({
         showPost={showPost}
       />
       {!showPost ? (
-        <div className="flex flex-col justify-center items-center  mx-5 relative">
+        <div className="flex flex-col justify-center items-center mx-5 relative">
           <div className="py-10 space-y-3 md:w-[500px] text-center">
             <h1 className="text-5xl font-bold">Realtime Blog</h1>
-
             <p className="text-lg text-gray-600">
               <q>
                 Be who you are and say what you feel, because those who mind

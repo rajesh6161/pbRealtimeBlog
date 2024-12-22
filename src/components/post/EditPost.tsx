@@ -2,21 +2,33 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { editPost } from '../../features/post/postSlice';
 import Spinner from '../Spinner';
+import { Post } from '../../App';
+import { AppDispatch, RootState } from '../../store';
 
-const EditPost = ({ currentPost }) => {
-  const dispatch = useDispatch();
-  const [postState, setPostState] = useState({
+interface EditPostProps {
+  currentPost: Post;
+}
+
+interface PostState {
+  title: string;
+  imgurl?: string;
+  content: string;
+}
+
+const EditPost: React.FC<EditPostProps> = ({ currentPost }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [postState, setPostState] = useState<PostState>({
     title: currentPost.title,
     imgurl: currentPost.imgurl,
     content: currentPost.content,
   });
 
-  const { loading } = useSelector((state) => state.post);
+  const { loading } = useSelector((state: RootState) => state.post);
 
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="pb-14 space-y-3 w-[700px] px-10">
-        <h1 className="text-3xl font-bold  text-center">Edit Post</h1>
+        <h1 className="text-3xl font-bold text-center">Edit Post</h1>
         <div className="space-y-1">
           <p className="text-lg">Post Title</p>
           <input
@@ -45,7 +57,6 @@ const EditPost = ({ currentPost }) => {
           <p className="text-lg">Content</p>
           <textarea
             className="w-full"
-            type="text"
             value={postState.content}
             placeholder="Write Here..."
             rows={5}

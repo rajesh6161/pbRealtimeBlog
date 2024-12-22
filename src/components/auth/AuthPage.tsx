@@ -6,12 +6,14 @@ import {
 } from '../../features/auth/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../Spinner';
+import { AppDispatch, RootState } from '../../store';
+import { LoginCredentials, RegisterCredentials } from '../../features/auth/authService';
 
-const AuthPage = () => {
-  const dispatch = useDispatch();
+const AuthPage: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
 
-  const [loginPage, setLoginPage] = useState(true);
-  const [creds, setCreds] = useState({
+  const [loginPage, setLoginPage] = useState<boolean>(true);
+  const [creds, setCreds] = useState<RegisterCredentials>({
     email: '',
     password: '',
     passwordConfirm: '',
@@ -21,12 +23,26 @@ const AuthPage = () => {
     dispatch(setUserLoggedIn());
   }, [dispatch]);
 
-  const { loading, isRegistered } = useSelector((state) => state.auth);
+  const { loading, isRegistered } = useSelector((state: RootState) => state.auth);
+  
   useEffect(() => {
     if (isRegistered) {
       setLoginPage(true);
     }
   }, [isRegistered]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (loginPage) {
+      const loginCreds: LoginCredentials = {
+        email: creds.email,
+        password: creds.password
+      };
+      dispatch(login(loginCreds));
+    } else {
+      dispatch(register(creds));
+    }
+  };
 
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -45,7 +61,10 @@ const AuthPage = () => {
             <a
               href="#"
               className="font-medium text-indigo-600 hover:text-indigo-500 pl-1"
-              onClick={() => setLoginPage(!loginPage)}
+              onClick={(e) => {
+                e.preventDefault();
+                setLoginPage(!loginPage);
+              }}
             >
               {loginPage ? 'Register a new account' : 'Login to your account'}
             </a>
@@ -53,10 +72,7 @@ const AuthPage = () => {
         </>
         <form
           className="mt-8 space-y-6"
-          onSubmit={(e) => {
-            e.preventDefault();
-            loginPage ? dispatch(login(creds)) : dispatch(register(creds));
-          }}
+          onSubmit={handleSubmit}
         >
           <input type="hidden" name="remember" value="true" />
           <div className="-space-y-px rounded-md shadow-sm">
@@ -97,14 +113,14 @@ const AuthPage = () => {
 
             {!loginPage && (
               <div>
-                <label htmlFor="password" className="sr-only">
-                  Password
+                <label htmlFor="passwordConfirm" className="sr-only">
+                  Confirm Password
                 </label>
                 <input
-                  id="password"
-                  name="password"
+                  id="passwordConfirm"
+                  name="passwordConfirm"
                   type="password"
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   required
                   className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   placeholder="Confirm Your Password"
