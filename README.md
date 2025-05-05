@@ -1,4 +1,4 @@
-“I’m seeking a maintainer for this repository. As many are ⭐ it for learning purposes, it would be valuable to have someone update it with the latest changes. Unfortunately, I’m tied up with other commitments and unable to maintain it at the moment. Thanks in advance!”
+
 
 # Realtime Blog App made using React and PocketBase
 ![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Frajesh6161%2FpbRealtimeBlog&label=TOTAL%20VIEWS&countColor=%2337d67a&style=plastic&labelStyle=upper)
